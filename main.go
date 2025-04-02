@@ -3,25 +3,12 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/idukrystal/GitHub-User-Activity-CLI/pkg/github"
 	"net/http"
 	"os"
 )
 
-type eventType string
-
-type Event struct {
-	Type eventType
-	Repo Repo
-	Payload Payload
-}
-
-type Repo struct {
-	Name string
-}
-
-type Payload struct {
-	Commits []any
-}
+type Event = github.Event
 
 const NoUsernameError = "Usename Not Provided"
 
