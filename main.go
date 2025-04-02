@@ -1,10 +1,27 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
 )
+
+type eventType string
+
+type Event struct {
+	Type eventType
+	Repo Repo
+	Payload Payload
+}
+
+type Repo struct {
+	Name string
+}
+
+type Payload struct {
+	Commits []any
+}
 
 const NoUsernameError = "Usename Not Provided"
 
@@ -29,5 +46,17 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(res)
+
+	// the response body must be closed after the function completes
+	defer res.Body.Close()
+
+	var events []Event
+
+	if err := json.NewDecoder(res.Body).Decode(&events); err != nil {
+		panic(err)
+	}
+
+	for _, event := range events {
+		fmt.Println(event.Type)
+	}
 }
