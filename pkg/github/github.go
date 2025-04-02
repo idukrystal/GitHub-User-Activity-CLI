@@ -20,7 +20,7 @@ func (e Event) GetNotificationMessage() (string, error) {
 	case PushEvent:
 		return fmt.Sprintf("Pushed %d commits to %s", len(e.Payload.Commits), e.Repo.Name), nil
 	case CreateEvent:
-		return fmt.Sprintf("Created a new %s: %s", e.Payload.RefType, e.Payload.Ref), nil
+		return fmt.Sprintf("Created a new %s %s in %s", e.Payload.RefType, e.Payload.Ref, e.Repo.Name), nil
 	default:
 		return eventType, fmt.Errorf("Unsupported Event Type: %s", eventType)
 		
