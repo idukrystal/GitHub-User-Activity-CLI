@@ -18,7 +18,7 @@ type Event struct {
 func (e Event) GetNotificationMessage() (string, error) {
 	switch eventType := e.Type; eventType {
 	case PushEvent:
-		return fmt.Sprintf("Pushed %d commits to %s", len(e.Payload.Commits), e.Repo.Name), nil
+		return fmt.Sprintf("Pushed %d commit(s) to %s", len(e.Payload.Commits), e.Repo.Name), nil
 	case CreateEvent:
 		return fmt.Sprintf("Created a new %s %s in %s", e.Payload.RefType, e.Payload.Ref, e.Repo.Name), nil
 	default:
