@@ -44,6 +44,6 @@ func main() {
 	}
 
 	for _, event := range events {
-		fmt.Println(event.Type)
+		fmt.Println("-", event)
 	}
 }
