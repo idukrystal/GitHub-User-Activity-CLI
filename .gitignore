@@ -3,3 +3,6 @@
 # Emacs auto generated files
 *~
 \#*\#
+
+# Ignore files with no extension (executables)
+!*.*
