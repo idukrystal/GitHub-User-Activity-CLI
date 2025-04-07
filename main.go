@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/idukrystal/GitHub-User-Activity-CLI/pkg/github"
+	"io"
 	"net/http"
 	"os"
 )
@@ -44,18 +45,21 @@ func main() {
 
 	var events []Event
 
-	decoder := json.NewDecoder(res.Body)
+	bodyBytes, err := io.ReadAll(res.Body)
+	if err != nil {
+		panic(err)
+	}
 
-	if err := decoder.Decode(&events); err != nil {
+	if err := json.Unmarshal(bodyBytes, &events); err != nil {
 		// The github api returns a json that contains a message key to explain what went wrong
 		var typeErr *json.UnmarshalTypeError
 		if errors.As(err, &typeErr) {
 			var invalidResponse InvalidResponse
-			if err = decoder.Decode(&invalidResponse); err == nil {
-				panic(invalidResponse.Message)
+			if err = json.Unmarshal(bodyBytes, &invalidResponse); err == nil {
+				fmt.Printf("username %s: %s\n", args[1], invalidResponse.Message)
+				return
 			}
 		}
-		fmt.Println("here")
 		panic(err)
 	}
 
