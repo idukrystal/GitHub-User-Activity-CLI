@@ -3,13 +3,17 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/idukrystal/GitHub-User-Activity-CLI/pkg/github"
 	"net/http"
 	"os"
 )
 
-type Event = github.Event
+type (
+	Event = github.Event
+	InvalidResponse = github.InvalidResponse
+)
 
 const NoUsernameError = "Usename Not Provided"
 
@@ -40,7 +44,18 @@ func main() {
 
 	var events []Event
 
-	if err := json.NewDecoder(res.Body).Decode(&events); err != nil {
+	decoder := json.NewDecoder(res.Body)
+
+	if err := decoder.Decode(&events); err != nil {
+		// The github api returns a json that contains a message key to explain what went wrong
+		var typeErr *json.UnmarshalTypeError
+		if errors.As(err, &typeErr) {
+			var invalidResponse InvalidResponse
+			if err = decoder.Decode(&invalidResponse); err == nil {
+				panic(invalidResponse.Message)
+			}
+		}
+		fmt.Println("here")
 		panic(err)
 	}
 

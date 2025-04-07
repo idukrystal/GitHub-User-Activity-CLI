@@ -10,6 +10,12 @@ const (
 	CreateEvent = "CreateEvent"
 )
 
+// Github retuns a data structure with a message if username not found
+type InvalidResponse struct{
+	Message string
+}
+
+// Github api retuns a list of events if username is found
 type Event struct {
 	Type string
 	Repo Repo
