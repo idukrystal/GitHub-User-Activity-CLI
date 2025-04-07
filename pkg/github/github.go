@@ -6,7 +6,10 @@ type EventType string
 
 const (
 	PushEvent = "PushEvent"
+	ForkEvent = "ForkEvent"
 	CreateEvent = "CreateEvent"
+	
+	
 )
 
 type Event struct {
@@ -19,6 +22,8 @@ func (e Event) GetNotificationMessage() (string, error) {
 	switch eventType := e.Type; eventType {
 	case PushEvent:
 		return fmt.Sprintf("Pushed %d commit(s) to %s", len(e.Payload.Commits), e.Repo.Name), nil
+	case ForkEvent:
+		return fmt.Sprintf("Forked %s from %s", e.Repo.Name, e.Payload.Forkee.FullName), nil
 	case CreateEvent:
 		return fmt.Sprintf("Created a new %s %s in %s", e.Payload.RefType, e.Payload.Ref, e.Repo.Name), nil
 	default:
@@ -42,5 +47,9 @@ type Payload struct {
 	Commits []any
 	Ref string
 	RefType string `json:"ref_type"`
+	Forkee Forkee
 }
 
+type Forkee struct {
+	FullName string `json:"full_name"`
+}
