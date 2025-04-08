@@ -2,6 +2,8 @@
 
 **GitHub User Activity CLI** is a command-line interface (CLI) tool written in Go, designed to fetch and display activity data from GitHub users. It allows you to view key information such as repositories, commits, pull requests, and other statistics directly from your terminal.
 
+a solution to: https://roadmap.sh/projects/github-user-activity
+
 ## Features
 
 - Fetch GitHub user activity data.
